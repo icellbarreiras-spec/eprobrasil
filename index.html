@@ -98,7 +98,7 @@ body.admin-open{padding-bottom:0!important}
 <label>Logomarca (em breve)<input name="logoFile" type="file" accept="image/*" disabled title="Upload público será ativado após validação de segurança"></label>
 <label class="wide">Descrição dos serviços<textarea name="description" rows="3" maxlength="400"></textarea></label>
 </div>
-<p class="notice">Cadastro público em fase de testes. As solicitações ficam pendentes de aprovação. Para segurança, o envio de logomarcas ainda não está disponível.</p><p class="muted" style="font-size:12px">Ao enviar, você solicita a inclusão dos dados no Encontro Pro Brasil. O cadastro só será publicado após aprovação.</p>
+<p class="notice">As solicitações ficam pendentes de aprovação. O envio de logomarcas pelo formulário público ainda não está disponível.</p><p class="muted" style="font-size:12px">Ao enviar, você solicita a inclusão dos dados no Encontro Pro Brasil. O cadastro só será publicado após aprovação.</p>
 <button class="primary" type="submit">Enviar para aprovação</button>
 <div id="requestMsg" class="muted" aria-live="polite"></div>
 </form></div>
@@ -106,7 +106,7 @@ body.admin-open{padding-bottom:0!important}
 <div class="sectionhead"><div><h2>Profissionais e empresas</h2><div class="muted" id="count">Carregando...</div></div><span class="muted">Resultados públicos</span></div>
 <section class="grid" id="results"></section>
 </main>
-<footer class="footer">Encontro Pro Brasil • Tecnologia para aproximar clientes e profissionais<br>Versão de testes integrada ao Supabase — publicação pública ainda não concluída.</footer>
+<footer class="footer">Encontro Pro Brasil • Tecnologia para aproximar clientes e profissionais<br>Todos os direitos reservados.</footer>
 
 
 <div class="ad-strip" id="adStrip" aria-label="Anúncios patrocinados"><div class="ad-strip-inner"><span class="ad-label">ANÚNCIO</span><img id="adStripLogo" class="ad-logo" alt="Logo do anunciante"><div class="ad-copy"><strong id="adStripName">Anuncie aqui no Encontro Pro Brasil</strong><span id="adStripText">Sua empresa pode aparecer nesta faixa fixa enquanto as pessoas pesquisam.</span></div><a class="ad-cta" id="adStripLink" href="#publicFormWrap" onclick="epbShowPublicForm()">QUERO ANUNCIAR</a><div class="ad-dots" id="adDots"></div></div></div>
@@ -158,7 +158,7 @@ body.admin-open{padding-bottom:0!important}
   </div>
   <div class="admin-guidelines"><div><h3>✓ Diretrizes do sistema</h3><p class="muted">Todo cadastro feito por empresas ou profissionais ficará aguardando aprovação. A administração também poderá cadastrar diretamente e gerenciar os registros.</p></div><div id="adminManagers"><h3>♟ Hierarquia de administradores</h3><p class="muted">1. Administrador principal — controle total.<br>2. Administradores autorizados — permissões definidas.<br>3. Visitantes — apenas consulta.</p></div></div>
  </div>
- <div class="notice">Versão de integração: as operações de empresas e anunciantes usam o Supabase. O formulário público utiliza uma função controlada do Supabase para solicitar aprovação; upload público de imagens permanece suspenso.</div>
+ <div class="notice">Os cadastros públicos aguardam aprovação. O envio público de imagens permanece desativado até a revisão de segurança.</div>
 <section class="brand-settings admin-section" id="brandSettings">
  <h3>Identidade visual do sistema</h3>
  <p class="muted">Adicione ou troque a logomarca oficial. A mesma imagem será usada em tamanho pequeno no cabeçalho e como marca d’água discreta no painel.</p>
@@ -337,16 +337,22 @@ render();startAdRotation();</script>
 /* Encontro Pro Brasil — integração Supabase (versão de testes).
    Nunca inserir chaves secretas; somente sb_publishable_. */
 const EPB_URL='https://opbojautpjforiyzfpoc.supabase.co';
-let epbKey=localStorage.getItem('epb_publishable_key')||'';
+// Chave PUBLICA do projeto EPro (nunca usar service_role ou sb_secret).
+// Substitua o valor abaixo pela sua sb_publishable_... antes de publicar.
+const EPB_PUBLIC_KEY='sb_publishable_1PLof5eDoPls7NA4-Sqpxw_EpjBO4Fl';
+let epbKey=EPB_PUBLIC_KEY;
 let epbSession=null;
-const epbStatus=document.createElement('div');
-epbStatus.style.cssText='background:#fff8df;border:1px solid #ead38a;border-radius:12px;padding:12px 16px;margin:15px auto;max-width:1120px;color:#634c0d;font-size:13px;position:relative;z-index:2';
-epbStatus.innerHTML='<strong>Integração Supabase — ambiente de testes</strong><div id="epbConnState">Introduza a chave pública para carregar os dados.</div><div style="display:flex;flex-wrap:wrap;gap:8px;margin-top:8px"><input id="epbKeyInput" type="password" class="field" style="max-width:430px" placeholder="Cole aqui sb_publishable_... (somente chave pública)"><button id="epbConnectBtn" class="primary">Ligar ao Supabase</button><button id="epbReloadBtn" class="secondary">Atualizar dados</button></div><small>Esta chave pública será guardada somente neste navegador. Nunca cole sb_secret_ ou service_role.</small>';
-document.querySelector('header.top').after(epbStatus);
-document.getElementById('epbKeyInput').value=epbKey;
-document.getElementById('epbConnectBtn').onclick=()=>{let k=document.getElementById('epbKeyInput').value.trim();if(!k.startsWith('sb_publishable_'))return alert('Cole somente a Publishable key (sb_publishable_...).');epbKey=k;localStorage.setItem('epb_publishable_key',k);epbRefresh();};
-document.getElementById('epbReloadBtn').onclick=()=>epbRefresh();
-function epbMessage(msg){document.getElementById('epbConnState').textContent=msg}
+// A configuração técnica não aparece na página pública.
+// Durante a preparação, a chave pode ser inserida apenas na tela de login administrativo.
+const epbSetup=document.createElement('div');
+epbSetup.id='epbSetup';
+epbSetup.className='notice';
+epbSetup.innerHTML='<strong>Configuração inicial do EPro</strong><p>Insira a chave pública sb_publishable_ do projeto EPro para testar neste navegador. Para todos os visitantes terem acesso automático, a chave pública deve ser inserida no ficheiro HTML antes da publicação.</p><input id="epbKeyInput" class="field" type="password" autocomplete="off" placeholder="sb_publishable_..."><p><button id="epbConnectBtn" class="secondary" type="button">Guardar chave pública e ligar</button></p><div id="epbConnState" role="status"></div>';
+document.getElementById('loginBox').prepend(epbSetup);
+function epbUpdateSetup(){epbSetup.classList.toggle('hidden',Boolean(epbKey));}
+epbUpdateSetup();
+document.getElementById('epbConnectBtn').onclick=()=>{const k=document.getElementById('epbKeyInput').value.trim();if(!k.startsWith('sb_publishable_'))return alert('Use apenas a Publishable key do projeto EPro.');epbKey=k;localStorage.setItem('epb_publishable_key',k);epbUpdateSetup();epbRefresh();};
+function epbMessage(msg){const el=document.getElementById('epbConnState');if(el)el.textContent=msg;}
 function epbShowPublicForm(){const wrap=document.getElementById('publicFormWrap');wrap.classList.remove('hidden');wrap.scrollIntoView({behavior:'smooth',block:'start'});}
 function epbAuthHeaders(json=true){if(!epbKey)throw Error('Configure a chave pública primeiro.');const h={'apikey':epbKey};if(json)h['Content-Type']='application/json';if(epbSession?.access_token)h.Authorization='Bearer '+epbSession.access_token;return h}
 async function epbFetch(path,options={}){const r=await fetch(EPB_URL+path,{...options,headers:{...epbAuthHeaders(),...(options.headers||{})}});const raw=await r.text();let data;try{data=raw?JSON.parse(raw):null}catch{data=raw}if(!r.ok)throw Error((data?.message||data?.msg||data?.error_description||data?.error||'Erro HTTP '+r.status).toString());return data}
@@ -356,7 +362,7 @@ function epbMapAd(x){return {id:x.id,name:x.nome,headline:x.chamada||'',descript
 async function submitRequest(e){
  e.preventDefault();
  const f=e.currentTarget, btn=f.querySelector('button[type="submit"]'), msg=document.getElementById('requestMsg');
- if(!epbKey){msg.textContent='Conecte primeiro a chave pública do Supabase.';return;}
+ if(!epbKey){msg.textContent='Cadastro temporariamente indisponível. Tente novamente mais tarde.';return;}
  const d=Object.fromEntries(new FormData(f).entries());
  const state=(d.state||'').trim().toUpperCase(), phone=(d.phone||'').replace(/\D/g,'');
  if(!/^[A-Z]{2}$/.test(state)){msg.textContent='Informe a UF com duas letras (ex.: BA).';return;}
@@ -370,7 +376,7 @@ async function submitRequest(e){
  finally{btn.disabled=false;}
 }
 async function epbRefresh(){
- if(!epbKey){epbMessage('Falta a chave pública. Cole-a no campo acima.');return;}
+ if(!epbKey){console.warn('EPro: falta configurar a chave pública.');return;}
  epbMessage('A carregar empresas aprovadas...');
  try{
   // Consulta direta à tabela, sujeita à política RLS de leitura pública.
