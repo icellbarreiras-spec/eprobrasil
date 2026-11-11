@@ -298,7 +298,19 @@ async function savePro(e){
  }catch(err){alert(err.message)}
 }
 function resetForm(){document.getElementById('proForm').reset();document.querySelector('[name=id]').value='';document.getElementById('formTitle').textContent='Adicionar profissional ou empresa';editing=null}
-function editPro(id){const p=pros.find(x=>x.id===id);if(!p)return;const f=document.getElementById('proForm');Object.keys(p).forEach(k=>{if(f.elements[k])f.elements[k].value=p[k]});document.getElementById('formTitle').textContent='Editar cadastro';}
+function editPro(id){
+ const p=pros.find(x=>String(x.id)===String(id));
+ if(!p){alert('Cadastro não encontrado. Atualize a lista e tente novamente.');return;}
+ const f=document.getElementById('proForm');
+ if(!f){alert('Formulário de edição não encontrado.');return;}
+ f.reset();
+ adminGo('proFormSection',null);
+ Object.keys(p).forEach(k=>{if(f.elements[k]&&k!=='logoFile'&&k!=='logo')f.elements[k].value=p[k]??'';});
+ f.elements.id.value=p.id;
+ document.getElementById('formTitle').textContent='Editar cadastro — '+p.name;
+ document.getElementById('proFormSection').scrollIntoView({behavior:'smooth',block:'start'});
+ f.elements.name?.focus({preventScroll:true});
+}
 function deletePro(id){if(!confirm('Excluir este cadastro?'))return;pros=pros.filter(p=>p.id!==id);persist();render();renderAdmin()}
 function renderAdmin(){
  updateDashboard();
