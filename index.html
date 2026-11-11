@@ -96,10 +96,10 @@ body.admin-open{padding-bottom:0!important}
 <label>Site (opcional)<input name="website" type="url" placeholder="https://"></label>
 <label>E-mail (opcional)<input name="email" type="email" placeholder="contato@empresa.com"></label>
 <label>Instagram (opcional)<input name="instagram" placeholder="@suaempresa"></label>
-<label>Logomarca (em breve)<input name="logoFile" type="file" accept="image/*" disabled title="Upload público será ativado após validação de segurança"></label>
+<label>Logomarca (disponível após aprovação)<input name="logoFile" type="file" accept="image/*" disabled title="Envio de logomarca realizado pela administração"></label>
 <label class="wide">Descrição dos serviços<textarea name="description" rows="3" maxlength="400"></textarea></label>
 </div>
-<p class="notice">As solicitações ficam pendentes de aprovação. O envio de logomarcas pelo formulário público ainda não está disponível.</p><p class="muted" style="font-size:12px">Ao enviar, você solicita a inclusão dos dados no Encontro Pro Brasil. O cadastro só será publicado após aprovação.</p>
+<p class="notice">As solicitações ficam pendentes de aprovação. O cadastro público recebe os dados para análise. A logomarca pode ser adicionada pela administração após a aprovação.</p><p class="muted" style="font-size:12px">Ao enviar, você solicita a inclusão dos dados no Encontro Pro Brasil. O cadastro só será publicado após aprovação.</p>
 <button class="primary" type="submit">Enviar para aprovação</button>
 <div id="requestMsg" class="muted" aria-live="polite"></div>
 </form></div>
@@ -139,7 +139,7 @@ body.admin-open{padding-bottom:0!important}
 </aside>
 <div class="admin-main">
  <div id="adminHome">
-  <div class="admin-banner"><div><h2>Bem-vindo ao Encontro Pro Brasil</h2><p>Painel administrativo</p></div><div class="admin-safe"><strong>✓ Painel administrativo — prévia</strong><br>A sessão administrativa é validada pelo Supabase. As operações dependem das regras de acesso do banco.</div></div>
+  <div class="admin-banner"><div><h2>Bem-vindo ao Encontro Pro Brasil</h2><p>Painel administrativo</p></div><div class="admin-safe"><strong>✓ Painel administrativo</strong><br>A sessão administrativa é validada pelo Supabase. As operações dependem das regras de acesso do banco.</div></div>
   <div class="admin-stats">
    <div class="admin-stat"><b id="statPros">0</b><span>Profissionais cadastrados</span><small>Total de profissionais ativos</small></div>
    <div class="admin-stat"><b id="statCompanies">0</b><span>Empresas cadastradas</span><small>Total de empresas ativas</small></div>
@@ -159,7 +159,7 @@ body.admin-open{padding-bottom:0!important}
   </div>
   <div class="admin-guidelines"><div><h3>✓ Diretrizes do sistema</h3><p class="muted">Todo cadastro feito por empresas ou profissionais ficará aguardando aprovação. A administração também poderá cadastrar diretamente e gerenciar os registros.</p></div><div id="adminManagers"><h3>♟ Hierarquia de administradores</h3><p class="muted">1. Administrador principal — controle total.<br>2. Administradores autorizados — permissões definidas.<br>3. Visitantes — apenas consulta.</p></div></div>
  </div>
- <div class="notice">Os cadastros públicos aguardam aprovação. O envio público de imagens permanece desativado até a revisão de segurança.</div>
+ <div class="notice">Os cadastros públicos aguardam aprovação. O envio de logomarcas é realizado pela administração. Solicitações públicas continuam aguardando aprovação.</div>
 <section class="brand-settings admin-section" id="brandSettings">
  <h3>Identidade visual do sistema</h3>
  <p class="muted">Adicione ou troque a logomarca oficial. A mesma imagem será usada em tamanho pequeno no cabeçalho e como marca d’água discreta no painel.</p>
@@ -183,7 +183,7 @@ body.admin-open{padding-bottom:0!important}
 <label>Site (opcional)<input name="website" type="url" placeholder="https://"></label>
 <label>E-mail (opcional)<input name="email" type="email"></label>
 <label>Instagram (opcional)<input name="instagram" placeholder="@suaempresa"></label>
-<label>Logomarca (opcional)<input name="logoFile" type="file" accept="image/*"></label>
+<label>Logomarca (opcional)<input name="logoFile" type="file" accept="image/png,image/jpeg,image/webp"><small class="muted">JPG, PNG ou WebP, até 2 MB.</small></label>
 <label class="wide">Descrição dos serviços<textarea name="description" rows="3" maxlength="240"></textarea></label>
 <label class="wide">Endereço ou bairro (opcional)<input name="address" maxlength="120"></label>
 </div>
@@ -420,7 +420,7 @@ async function epbUpload(bucket,file){
  if(!response.ok){let details='';try{const error=await response.json();details=error.message||error.error||''}catch{}throw Error('Falha no envio da logomarca ('+response.status+'). '+details)}
  return EPB_URL+'/storage/v1/object/public/'+encodeURIComponent(bucket)+'/'+path;
 }
-async function savePro(e){e.preventDefault();if(!epbSession)return alert('Faça login antes.');const f=e.currentTarget,d=Object.fromEntries(new FormData(f).entries()),file=f.elements.logoFile.files[0];try{if(file)throw Error('Upload de imagens ainda não ativado nesta versão de testes. Guarde o cadastro sem imagem por enquanto.');const existing=pros.find(p=>p.id===d.id)||requests.find(p=>p.id===d.id);const row={nome:d.name.trim(),categoria:d.category.trim(),estado:d.state.trim().toUpperCase(),cidade:d.city.trim(),whatsapp:d.phone.replace(/\D/g,''),site:d.website||null,email:d.email||null,instagram:d.instagram||null,status:'aprovado',tipo:d.entityType,descricao:d.description||null,endereco:d.address||null};await epbSaveRow('empresas',row,d.id||null);resetForm();await epbLoadAdmin();alert('Cadastro guardado no Supabase.');}catch(err){alert('Erro ao guardar: '+err.message)}}
+async function savePro(e){e.preventDefault();if(!epbSession)return alert('Faça login antes.');const f=e.currentTarget,d=Object.fromEntries(new FormData(f).entries()),file=f.elements.logoFile.files[0],btn=f.querySelector('button[type="submit"]');btn.disabled=true;try{const existing=pros.find(p=>p.id===d.id)||requests.find(p=>p.id===d.id);const row={nome:d.name.trim(),categoria:d.category.trim(),estado:d.state.trim().toUpperCase(),cidade:d.city.trim(),whatsapp:d.phone.replace(/\D/g,''),site:d.website||null,email:d.email||null,instagram:d.instagram||null,status:'aprovado',tipo:d.entityType,descricao:d.description||null,endereco:d.address||null};if(file)row.logo_url=await epbUpload('logos-empresas',file);await epbSaveRow('empresas',row,d.id||null);resetForm();await epbLoadAdmin();alert('Cadastro guardado no Supabase.');}catch(err){alert('Erro ao guardar: '+err.message)}finally{btn.disabled=false}}
 async function approveRequest(id){if(!epbSession)return;try{await epbSaveRow('empresas',{status:'aprovado'},id);await epbLoadAdmin()}catch(err){alert(err.message)}}
 async function rejectRequest(id){if(!confirm('Rejeitar esta solicitação?'))return;try{await epbSaveRow('empresas',{status:'rejeitado'},id);await epbLoadAdmin()}catch(err){alert(err.message)}}
 async function deletePro(id){if(!confirm('Excluir este cadastro do banco?'))return;try{await epbDeleteRow('empresas',id);await epbLoadAdmin()}catch(err){alert(err.message)}}
