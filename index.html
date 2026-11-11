@@ -64,6 +64,44 @@ body.admin-open{padding-bottom:0!important}
 @media(max-width:900px){.panelhead.epb-admin-topbar{height:auto;min-height:116px;padding:14px 18px}.epb-top-brand{gap:10px}.epb-top-brand img{width:76px;height:76px}.epb-top-title{font-size:27px}.epb-admin-user{font-size:11px}.admin-layout{grid-template-columns:190px minmax(0,1fr);min-height:calc(100vh - 116px)}.admin-sidebar{min-height:calc(100vh - 116px)}.admin-main{padding:14px}.admin-columns{grid-template-columns:1fr}.admin-stats{grid-template-columns:repeat(2,minmax(0,1fr))}}
 @media(max-width:600px){.panelhead.epb-admin-topbar{min-height:96px;padding:10px 12px}.epb-top-brand img{width:55px;height:55px}.epb-top-title{font-size:21px;letter-spacing:-.5px}.epb-top-brand small{font-size:7px}.epb-admin-user{gap:6px}.epb-admin-user>div{display:none}.epb-user-icon{width:35px;height:35px;font-size:18px}.epb-close{width:32px;height:32px}.admin-layout{grid-template-columns:1fr;min-height:calc(100vh - 96px)}.admin-sidebar{min-height:0;padding:9px}.admin-brand{display:none}.admin-nav{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:5px}.admin-nav button{font-size:11px;padding:8px 7px}.admin-main{padding:10px}.admin-banner{padding:13px;min-height:0}.admin-banner h2{font-size:19px}.admin-stats{grid-template-columns:repeat(2,minmax(0,1fr));gap:7px}.admin-stat{min-height:108px;padding:10px}.admin-stat b{font-size:22px}.admin-stat span{font-size:11px}.admin-stat small{font-size:10px}.admin-columns{grid-template-columns:1fr}.quick-grid{grid-template-columns:1fr 1fr}.admin-guidelines{grid-template-columns:1fr;gap:10px;padding:13px}.ad-strip{padding-bottom:calc(8px + env(safe-area-inset-bottom))}}
 
+
+/* EPRO: refinamentos de produção para a área pública — sem alterar regras de dados */
+body:not(.admin-open)::before{right:3vw;bottom:115px;width:min(24vw,240px);height:min(24vw,240px);opacity:.025}
+.hero::before{right:24px;font-size:clamp(26px,5.4vw,62px);color:rgba(23,105,170,.035)}
+.hero,.requestbox{box-shadow:0 8px 28px rgba(18,58,112,.065)}
+.hero{padding:clamp(20px,3vw,34px)}
+.field:focus-visible,button:focus-visible,a:focus-visible{outline:3px solid #e7ae28;outline-offset:2px}
+.searchgrid .primary{min-height:48px}
+.ad-strip{box-shadow:0 -3px 16px rgba(5,28,52,.17)}
+.ad-cta{white-space:nowrap}
+@media(max-width:760px){
+  .topinner{align-items:center}
+  .searchgrid{grid-template-columns:minmax(0,1fr) minmax(0,1fr)}
+  .searchgrid input#q{grid-column:1/-1}
+  .searchgrid #city{grid-column:2}
+  .searchgrid .primary{grid-column:1/-1}
+  body:not(.admin-open)::before{width:120px;height:120px;bottom:112px;opacity:.018}
+}
+@media(max-width:520px){
+  .topinner{flex-direction:row;align-items:center;gap:8px}
+  .brandwrap{gap:8px;min-width:0}
+  .logo-slot{width:45px;height:45px}
+  .brand{font-size:16px;line-height:1.15}
+  .tag{font-size:10px}
+  .topinner>button{font-size:11px;padding:9px 8px;flex:none}
+  .searchgrid{grid-template-columns:1fr}
+  .searchgrid input#q,.searchgrid #city,.searchgrid #state,.searchgrid .primary{grid-column:1/-1}
+  .ad-strip-inner{gap:7px}
+  .ad-logo{width:32px;height:32px}
+  .ad-label{font-size:9px;padding:3px 4px}
+  .ad-cta{font-size:10px;padding:8px 7px}
+  .ad-copy span{display:none}
+  body{padding-bottom:90px}
+  .ad-strip{padding:7px 8px calc(7px + env(safe-area-inset-bottom))}
+  .ad-strip-inner{min-height:36px}
+}
+@media(prefers-reduced-motion:reduce){*,*::before,*::after{scroll-behavior:auto!important;animation-duration:.01ms!important;transition-duration:.01ms!important}}
+
 </style>
 </head>
 <body>
@@ -82,7 +120,7 @@ body.admin-open{padding-bottom:0!important}
 </section>
 <section class="requestbox">
 <h2>É profissional ou tem uma empresa?</h2>
-<p class="muted">Solicite seu cadastro gratuitamente. As informações serão analisadas pela administração antes de aparecerem nas pesquisas.</p>
+<p class="muted">Solicite seu cadastro para análise da administração. Confira as condições e valores informados antes da confirmação. Seu perfil só aparecerá nas pesquisas após aprovação.</p>
 <button class="primary" type="button" onclick="epbShowPublicForm()">Solicitar cadastro</button>
 <div id="publicFormWrap" class="hidden">
 <form id="publicForm" onsubmit="submitRequest(event)">
