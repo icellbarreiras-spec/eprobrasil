@@ -129,10 +129,69 @@ body:not(.admin-open)::before{right:3vw;bottom:115px;width:min(24vw,240px);heigh
     margin: 0 0 10px 12px;
   }
 }
+
+/* Cabeçalho público alinhado à identidade visual do painel administrativo. */
+header.top {
+  background: #0b2c50;
+  border-bottom: 4px solid #0c68a8;
+  padding: 16px 20px;
+}
+header.top .topinner {
+  max-width: 1120px;
+  min-height: 130px;
+  align-items: center;
+  gap: 22px;
+}
+header.top .brandwrap { gap: 22px; min-width: 0; }
+header.top .logo-slot {
+  width: 124px;
+  height: 124px;
+  border: 0;
+  border-radius: 12px;
+  background: #fff;
+  overflow: hidden;
+  flex-shrink: 0;
+}
+header.top .logo-slot img { width: 100%; height: 100%; object-fit: contain; background: #fff; }
+header.top .logo-placeholder { color: #123a70; }
+header.top .brand {
+  color: #fff;
+  font-size: clamp(27px, 3.5vw, 46px);
+  font-weight: 850;
+  letter-spacing: -1.2px;
+  line-height: 1.1;
+}
+header.top .brand span { color: #ffcf16; }
+header.top .tag {
+  color: #e4f0ff;
+  font-size: 11px;
+  font-weight: 750;
+  letter-spacing: .35px;
+  opacity: 1;
+  margin-top: 7px;
+}
+header.top .topinner > button { flex-shrink: 0; }
+@media (max-width: 760px) {
+  header.top { padding: 12px 14px; }
+  header.top .topinner { min-height: 85px; gap: 10px; }
+  header.top .brandwrap { gap: 12px; }
+  header.top .logo-slot { width: 82px; height: 82px; }
+  header.top .brand { font-size: clamp(19px, 3.5vw, 29px); }
+  header.top .tag { font-size: 9px; }
+}
+@media (max-width: 520px) {
+  header.top { padding: 10px 9px; }
+  header.top .topinner { gap: 8px; min-height: 70px; }
+  header.top .brandwrap { gap: 8px; }
+  header.top .logo-slot { width: 66px; height: 66px; }
+  header.top .brand { font-size: clamp(16px, 4.7vw, 22px); letter-spacing: -.5px; }
+  header.top .tag { font-size: 7px; line-height: 1.3; }
+  header.top .topinner > button { font-size: 10px; padding: 8px 7px; }
+}
 </style>
 </head>
 <body>
-<header class="top"><div class="topinner"><div class="brandwrap"><label class="logo-slot" title="Adicionar ou trocar logo"><img id="brandLogo" class="hidden" alt="Logo Encontro Pro Brasil"><span id="logoPlaceholder" class="logo-placeholder">SUA<br>LOGO</span><input id="logoInput" type="file" accept="image/*" hidden onchange="loadLogo(event)"></label><div><div class="brand">Encontro <span>Pro</span> Brasil</div><div class="tag">Profissionais e serviços perto de você</div></div></div><button onclick="openAdmin()">Área administrativa</button></div></header>
+<header class="top"><div class="topinner"><div class="brandwrap"><label class="logo-slot" title="Adicionar ou trocar logo"><img id="brandLogo" class="hidden" alt="Logo Encontro Pro Brasil"><span id="logoPlaceholder" class="logo-placeholder">SUA<br>LOGO</span><input id="logoInput" type="file" accept="image/*" hidden onchange="loadLogo(event)"></label><div><div class="brand">Encontro <span>Pro Brasil</span></div><div class="tag">PROFISSIONAIS E EMPRESAS EM UM SÓ LUGAR</div></div></div><button onclick="openAdmin()">Área administrativa</button></div></header>
 <main>
 <section class="hero">
 <h1>Encontre o profissional certo.</h1>
